@@ -27,6 +27,8 @@ public class SerializarService {
     @Transactional
     public String generarJson() {
         try {
+
+
             // createObjectNode() crea las llaves principales del archivo: { }
             ObjectNode rootNode = objectMapper.createObjectNode();
 

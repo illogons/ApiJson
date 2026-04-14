@@ -1,6 +1,7 @@
 package org.example.apijson.Servicio;
 
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.example.apijson.DTO.AttributeRequestDTO;
 import org.example.apijson.DTO.AttributeResponseDTO;
@@ -23,6 +24,7 @@ public class AttributeService implements IAttributeService {
     private final AttributeTypeRepository attributeTypeRepository;
     private final AttributeMapping attributeMapping;
 
+    @SneakyThrows
     public List<AttributeResponseDTO> buscartodosvivos() {
         return attributeRepository.findAllByDeletedFalse().stream()
                 .map(attributeMapping::toDTO)
@@ -36,6 +38,7 @@ public class AttributeService implements IAttributeService {
                 .toList();
     }
 
+    @SneakyThrows // <--- AÑADE ESTO AQUÍ
     @Override
     public AttributeResponseDTO aniadirA(AttributeRequestDTO attribute) throws InvocationTargetException, IllegalAccessException {
 

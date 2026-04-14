@@ -20,7 +20,7 @@ public class AttributeMapping {
         }
         AttributeEntity entity = new AttributeEntity();
 
-        BeanUtils.copyProperties(dto, entity, "id", "createdAt", "modifiedAt");
+        BeanUtils.copyProperties(dto, entity, "id", "createdAt", "modifiedAt", "deleted");
 
         if(dto.getAttributeTypeId() != null) {
             AttributeTypeEntity type= new AttributeTypeEntity();

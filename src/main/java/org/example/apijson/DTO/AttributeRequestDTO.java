@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,11 +19,12 @@ public class AttributeRequestDTO {
 
     @NotNull(message = "pon algo")
     private String name;
+
     private Long attributeTypeId;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "pon algo")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
 
 
