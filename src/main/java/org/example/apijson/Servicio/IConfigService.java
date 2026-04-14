@@ -1,15 +1,16 @@
 package org.example.apijson.Servicio;
 
-import org.example.apijson.DTO.ConfigDTO;
+import org.example.apijson.DTO.ConfigRequestDto;
+import org.example.apijson.DTO.ConfigResponseDTO;
 
 import java.util.List;
 
 public interface IConfigService {
 
-    List<ConfigDTO> listar();
-    ConfigDTO aniadir(ConfigDTO configDTO);
+    List<ConfigResponseDTO> listar();
+    ConfigResponseDTO aniadir(ConfigRequestDto configDTO);
     void eliminar(Long id);
-    ConfigDTO actualizar(Long id, ConfigDTO configDTO);
+    ConfigResponseDTO actualizar(Long id, ConfigRequestDto configDTO);
 
 
 

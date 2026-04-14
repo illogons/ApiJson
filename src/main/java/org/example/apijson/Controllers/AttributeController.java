@@ -1,14 +1,14 @@
 package org.example.apijson.Controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.example.apijson.DTO.AttributeDTO;
-import org.example.apijson.DTO.AttributeTypeValueDTO;
-import org.example.apijson.Entity.AttributeEntity;
+import org.example.apijson.DTO.AttributeRequestDTO;
+import org.example.apijson.DTO.AttributeResponseDTO;
 import org.example.apijson.Servicio.IAttributeService;
 import org.example.apijson.annotation.SearchOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -19,23 +19,23 @@ public class AttributeController {
 
     @GetMapping("/listar/{id}")
     @SearchOperation(summary = "hola")
-    public ResponseEntity<AttributeDTO> listar(@PathVariable Long id){
+    public ResponseEntity<AttributeResponseDTO> listar(@PathVariable Long id){
         return ResponseEntity.ok(attributeService.buscarporid(id));
     }
 
     @PostMapping("/guardarnuevo")
-    public ResponseEntity<AttributeDTO> guardar(@RequestBody AttributeDTO attributeDTO){
+    public ResponseEntity<AttributeResponseDTO> guardar(@RequestBody AttributeRequestDTO attributeDTO) throws InvocationTargetException, IllegalAccessException {
         return ResponseEntity.ok(attributeService.aniadirA(attributeDTO));
     }
 
     @GetMapping("/listar")
-    public List<AttributeDTO> listar(){
+    public List<AttributeResponseDTO> listar(){
         return attributeService.buscartodosvivos();
 
     }
 
     @GetMapping("/listareliminados")
-    public List<AttributeDTO> listarLiminados(){
+    public List<AttributeResponseDTO> listarLiminados(){
         return attributeService.buscartodosmuertos();
     }
 
@@ -45,7 +45,7 @@ public class AttributeController {
     }
 
     @PutMapping("/actualizar/{id}")
-    public ResponseEntity<AttributeDTO> actualizar(@RequestBody Long id, @PathVariable AttributeDTO attribute){
+    public ResponseEntity<AttributeResponseDTO> actualizar(@RequestBody Long id, @PathVariable AttributeRequestDTO attribute) throws InvocationTargetException, IllegalAccessException {
         return ResponseEntity.ok(attributeService.actualizarA(id, attribute));
     }
 

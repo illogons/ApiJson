@@ -2,7 +2,8 @@ package org.example.apijson.Servicio;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.apijson.DTO.ConfigDTO;
+import org.example.apijson.DTO.ConfigRequestDto;
+import org.example.apijson.DTO.ConfigResponseDTO;
 import org.example.apijson.Entity.AttributeEntity;
 import org.example.apijson.Entity.ConfigEntity;
 import org.example.apijson.Mapping.AttributeMapping;
@@ -25,7 +26,7 @@ public class ConfigService implements IConfigService {
 
 
     @Override
-    public List<ConfigDTO> listar() {
+    public List<ConfigResponseDTO> listar() {
         return configRepository.findAll()
                 .stream()
                 .map(configMapping::toDTO)
@@ -33,18 +34,11 @@ public class ConfigService implements IConfigService {
     }
 
     @Override
-    public ConfigDTO aniadir(ConfigDTO configDTO) {
+    public ConfigResponseDTO aniadir(ConfigRequestDto configDTO) {
 
-        AttributeEntity attributeEntity = attributeRepository
-                .findById(configDTO.getAttributeId()).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
 
-        ConfigEntity parent = null;
-        if(parent.getParentConfig() != null) {
-            parent = configRepository.findById(configDTO.getParent()).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
-        }
-
-        ConfigEntity configEntity = configMapping.toEntity(configDTO,attributeEntity,parent);
-        ConfigDTO dto = configMapping.toDTO(configRepository.save(configEntity));
+        ConfigEntity configEntity = configMapping.toEntity(configDTO);
+        ConfigResponseDTO dto = configMapping.toDTO(configRepository.save(configEntity));
 
         return dto;
     }
@@ -59,7 +53,7 @@ public class ConfigService implements IConfigService {
     }
 
     @Override
-    public ConfigDTO actualizar(Long id, ConfigDTO configDTO) {
+    public ConfigResponseDTO actualizar(Long id, ConfigRequestDto configDTO) {
 
         if(configRepository.existsById(id)){
 
@@ -70,20 +64,10 @@ public class ConfigService implements IConfigService {
 
             ConfigEntity configentity = configRepository.findById(id).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
 
-            AttributeEntity attributeEntity = attributeRepository
-                    .findById(configDTO.getAttributeId()).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
-
-            ConfigEntity parent = null;
-            if(parent.getParentConfig() != null) {
-                parent = configRepository.findById(configDTO.getParent()).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
-            }
-
             configentity.setDefaultValue(configDTO.getDefaultValue());
-            configentity.setAttribute(attributeEntity);
-            configentity.setParentConfig(parent);
 
-            ConfigEntity configEntity = configMapping.toEntity(configDTO,attributeEntity,parent);
-            ConfigDTO dto = configMapping.toDTO(configRepository.save(configEntity));
+            ConfigEntity configEntity = configMapping.toEntity(configDTO);
+            ConfigResponseDTO dto = configMapping.toDTO(configRepository.save(configEntity));
 
 
             return dto;

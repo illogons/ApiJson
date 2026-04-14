@@ -6,24 +6,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttributeDTO {
+
+public class ConfigRequestDto {
 
     private Long id;
-    private String name;
-    private Long attributeTypeId;
-    private boolean deleted;
+    private Long parent;
+    private boolean delete;
+    private String defaultValue;
+    private Long attributeId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-
-
-
-
-
 
 }

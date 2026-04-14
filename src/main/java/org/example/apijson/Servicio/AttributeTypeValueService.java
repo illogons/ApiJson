@@ -2,7 +2,8 @@ package org.example.apijson.Servicio;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.apijson.DTO.AttributeTypeValueDTO;
+import org.example.apijson.DTO.AttributeTypeValueRequestDTO;
+import org.example.apijson.DTO.AttributeTypeValueResponseDTO;
 import org.example.apijson.Entity.AttributeTypeEntity;
 import org.example.apijson.Entity.AttributeTypeValueEntity;
 import org.example.apijson.Mapping.AttributeTypeValueMapping;
@@ -20,7 +21,7 @@ public class AttributeTypeValueService implements IAttributeTypeValueService {
     private final AttributeTypeValueRepository attributeTypeValue;
     private final AttributeTypeValueMapping attributeTypeValuemapping;
 
-    public List<AttributeTypeValueDTO> buscartodosvivos   () {
+    public List<AttributeTypeValueResponseDTO> buscartodosvivos   () {
 
         return  attributeTypeValue.findAllByDeletedFalse().stream()
                 .map(attributeTypeValuemapping::toDTO)
@@ -28,7 +29,7 @@ public class AttributeTypeValueService implements IAttributeTypeValueService {
     }
 
     @Override
-    public List<AttributeTypeValueDTO> buscartodosmuertos() {
+    public List<AttributeTypeValueResponseDTO> buscartodosmuertos() {
 
         return  attributeTypeValue.findAllByDeletedTrue()
                 .stream()
@@ -38,7 +39,7 @@ public class AttributeTypeValueService implements IAttributeTypeValueService {
     }
 
 
-    public AttributeTypeValueDTO buscarporid(Long id) {
+    public AttributeTypeValueResponseDTO buscarporid(Long id) {
 
         return attributeTypeValue.findAllByDeletedFalse(id)
                 .stream()
@@ -61,22 +62,20 @@ public class AttributeTypeValueService implements IAttributeTypeValueService {
 
 
     @Override
-    public AttributeTypeValueDTO aniadirA(AttributeTypeValueDTO attribute) {
+    public AttributeTypeValueResponseDTO aniadirA(AttributeTypeValueRequestDTO attribute) {
 
-        AttributeTypeEntity atributetype = attributeTypeValue.findById(attribute.getAttributeTypeId())
-                .orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado")).getAttributeType();
 
-        AttributeTypeValueEntity attributeEntity = attributeTypeValuemapping.toEntity(attribute, atributetype);
-        AttributeTypeValueDTO guardada = attributeTypeValuemapping.toDTO(attributeTypeValue.save(attributeEntity));
+        AttributeTypeValueEntity attributeEntity = attributeTypeValuemapping.toEntity(attribute);
+        AttributeTypeValueResponseDTO guardada = attributeTypeValuemapping.toDTO(attributeTypeValue.save(attributeEntity));
 
-        log.info("Atributo creado con exito ID: {} | Typo correcto: {}", attributeEntity.getId(), atributetype.getType());
+        log.info("Atributo creado con exito ID: {}", attributeEntity.getId());
 
         return guardada;
 
     }
 
     @Override
-    public AttributeTypeValueDTO actualizar(Long id, AttributeTypeValueDTO attribute) {
+    public AttributeTypeValueResponseDTO actualizar(Long id, AttributeTypeValueRequestDTO attribute) {
 
         if (attributeTypeValue.existsById(id)) {
 
@@ -85,11 +84,8 @@ public class AttributeTypeValueService implements IAttributeTypeValueService {
                 throw new RuntimeException("El ID del cuerpo no coincide con el ID de la URL");
             }
 
-            AttributeTypeEntity atributetype = attributeTypeValue.findById(attribute.getAttributeTypeId())
-                    .orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado")).getAttributeType();
-
-            AttributeTypeValueEntity attributeEntity = attributeTypeValuemapping.toEntity(attribute, atributetype);
-            AttributeTypeValueDTO guardada = attributeTypeValuemapping.toDTO(attributeTypeValue.save(attributeEntity));
+            AttributeTypeValueEntity attributeEntity = attributeTypeValuemapping.toEntity(attribute);
+            AttributeTypeValueResponseDTO guardada = attributeTypeValuemapping.toDTO(attributeTypeValue.save(attributeEntity));
 
             return guardada;
         } else {

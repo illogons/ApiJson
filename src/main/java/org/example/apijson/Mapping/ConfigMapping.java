@@ -1,25 +1,49 @@
 package org.example.apijson.Mapping;
 
 import lombok.RequiredArgsConstructor;
-import org.example.apijson.DTO.ConfigDTO;
+import org.example.apijson.DTO.ConfigResponseDTO;
 import org.example.apijson.Entity.AttributeEntity;
+import org.springframework.beans.BeanUtils;
+import org.example.apijson.DTO.ConfigRequestDto;
 import org.example.apijson.Entity.ConfigEntity;
 import org.springframework.stereotype.Component;
+
 
 @Component
 @RequiredArgsConstructor
 
 public class ConfigMapping {
 
-    public ConfigDTO toDTO(ConfigEntity entity) {
-        if (entity == null) return null;
+    public ConfigEntity toEntity(ConfigRequestDto dto) {
+        if (dto == null) return null;
+        ConfigEntity entity = new ConfigEntity();
 
-        ConfigDTO dto = new ConfigDTO();
+        BeanUtils.copyProperties(dto, entity);
 
-        dto.setId(entity.getId());
-        dto.setCreatedAt(entity.getCreatedAt());
-        dto.setModifiedAt(entity.getModifiedAt());
-        dto.setDefaultValue(entity.getDefaultValue());
+        if(dto.getParent() != null){
+            ConfigEntity parent= new ConfigEntity();
+            parent.setId(dto.getParent());
+            entity.setParentConfig(parent);
+        }
+
+        if(dto.getAttributeId() != null){
+            AttributeEntity attribute = new AttributeEntity();
+            attribute.setId(dto.getAttributeId());
+            entity.setAttribute(attribute);
+        }
+
+        return entity;
+    }
+
+
+    public ConfigResponseDTO toDTO(ConfigEntity entity) {
+        if (entity == null){
+            return null;
+        }
+
+        ConfigResponseDTO dto = new ConfigResponseDTO();
+
+        BeanUtils.copyProperties(entity, dto);
 
         if (entity.getAttribute() != null) {
             dto.setAttributeId(entity.getAttribute().getId());
@@ -32,19 +56,6 @@ public class ConfigMapping {
         return dto;
     }
 
-    public ConfigEntity toEntity(ConfigDTO dto, AttributeEntity attribute, ConfigEntity parent) {
-        if (dto == null) return null;
-        ConfigEntity entity = new ConfigEntity();
 
-        entity.setId(dto.getId());
-        entity.setCreatedAt(dto.getCreatedAt());
-        entity.setModifiedAt(dto.getModifiedAt());
-        entity.setDefaultValue(dto.getDefaultValue());
-
-        entity.setAttribute(attribute);
-        entity.setParentConfig(parent);
-
-        return entity;
-    }
 }
 

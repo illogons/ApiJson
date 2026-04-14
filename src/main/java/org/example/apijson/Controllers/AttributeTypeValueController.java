@@ -1,11 +1,8 @@
 package org.example.apijson.Controllers;
 
 import lombok.AllArgsConstructor;
-import org.example.apijson.DTO.AttributeDTO;
-import org.example.apijson.DTO.AttributeTypeValueDTO;
-import org.example.apijson.DTO.ConfigDTO;
-import org.example.apijson.Entity.AttributeTypeValueEntity;
-import org.example.apijson.Servicio.IAttributeService;
+import org.example.apijson.DTO.AttributeTypeValueRequestDTO;
+import org.example.apijson.DTO.AttributeTypeValueResponseDTO;
 import org.example.apijson.Servicio.IAttributeTypeValueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,22 +17,22 @@ public class AttributeTypeValueController {
     private final IAttributeTypeValueService attributeTypeValueService;
 
     @GetMapping("/listar/{id}")
-    public ResponseEntity<AttributeTypeValueDTO> listar(@PathVariable Long id){
+    public ResponseEntity<AttributeTypeValueResponseDTO> listar(@PathVariable Long id){
         return ResponseEntity.ok(attributeTypeValueService.buscarporid(id));
     }
 
     @PostMapping("/guardarnuevo")
-    public ResponseEntity<AttributeTypeValueDTO> guardar(@RequestBody AttributeTypeValueDTO DTO){
+    public ResponseEntity<AttributeTypeValueResponseDTO> guardar(@RequestBody AttributeTypeValueRequestDTO DTO){
         return ResponseEntity.ok(attributeTypeValueService.aniadirA(DTO));
     }
 
     @GetMapping("/listarvivos")
-    public List<AttributeTypeValueDTO> listar(){
+    public List<AttributeTypeValueResponseDTO> listar(){
         return attributeTypeValueService.buscartodosvivos();
     }
 
     @GetMapping("/listareliminados")
-    public List<AttributeTypeValueDTO> listarLiminados(){
+    public List<AttributeTypeValueResponseDTO> listarLiminados(){
         return attributeTypeValueService.buscartodosmuertos();
     }
 
@@ -45,7 +42,7 @@ public class AttributeTypeValueController {
     }
 
     @PutMapping("/actualizar/{id}")
-    public ResponseEntity<AttributeTypeValueDTO> actualizar(@RequestBody Long id, @PathVariable AttributeTypeValueDTO attribute){
+    public ResponseEntity<AttributeTypeValueResponseDTO> actualizar(@RequestBody Long id, @PathVariable AttributeTypeValueRequestDTO attribute){
         return ResponseEntity.ok(attributeTypeValueService.actualizar(id, attribute));
     }
 }

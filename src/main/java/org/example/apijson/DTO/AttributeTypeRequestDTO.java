@@ -1,28 +1,22 @@
 package org.example.apijson.DTO;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalTime;
-
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-
-
-public class AttributeTypeDTO {
+@NoArgsConstructor
+public class AttributeTypeRequestDTO {
 
     private Long id;
+
+    @NotNull(message = "no puede ser nulo")
     private String Type;
     private boolean deleted;
     private Boolean isEnum;
     private Boolean isList;
-
-
-
-
 }

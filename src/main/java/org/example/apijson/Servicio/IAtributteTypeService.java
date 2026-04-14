@@ -1,24 +1,24 @@
 package org.example.apijson.Servicio;
 
-import org.example.apijson.DTO.AttributeDTO;
-import org.example.apijson.DTO.AttributeTypeDTO;
-import org.example.apijson.Entity.AttributeTypeEntity;
+import org.example.apijson.DTO.AttributeTypeReponseDTO;
+import org.example.apijson.DTO.AttributeTypeRequestDTO;
+import org.example.apijson.DTO.AttributeTypeValueRequestDTO;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public interface IAtributteTypeService {
 
-    AttributeTypeDTO listarid(Long id);
+    AttributeTypeReponseDTO listarid(Long id);
 
-    List<AttributeTypeDTO> listartodosvivos();
-    List<AttributeTypeDTO> buscartodosmuertos ();
+    List<AttributeTypeReponseDTO> listartodosvivos();
+    List<AttributeTypeReponseDTO> buscartodosmuertos ();
 
 
-    AttributeTypeDTO aniadir(AttributeTypeDTO dto);
+    AttributeTypeReponseDTO aniadir(AttributeTypeRequestDTO dto) throws InvocationTargetException, IllegalAccessException;
 
     void eliminar(Long id);
 
-    AttributeTypeDTO actualizar(Long id, AttributeTypeDTO dto);
-
+    AttributeTypeReponseDTO actualizar(Long id, AttributeTypeRequestDTO dto);
 
 }

@@ -2,7 +2,6 @@ package org.example.apijson.Excepciones;
 
 
 import org.apache.coyote.BadRequestException;
-import org.example.apijson.DTO.AttributeTypeValueDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.crossstore.ChangeSetPersister;

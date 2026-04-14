@@ -1,24 +1,22 @@
 package org.example.apijson.Servicio;
 
-import org.example.apijson.DTO.AttributeDTO;
-import org.example.apijson.DTO.AttributeTypeDTO;
-import org.example.apijson.DTO.AttributeTypeValueDTO;
-import org.example.apijson.Entity.AttributeTypeValueEntity;
+import org.example.apijson.DTO.AttributeTypeValueRequestDTO;
+import org.example.apijson.DTO.AttributeTypeValueResponseDTO;
 
 import java.util.List;
 
 public interface IAttributeTypeValueService {
 
-    List<AttributeTypeValueDTO> buscartodosvivos();
-    List<AttributeTypeValueDTO> buscartodosmuertos();
+    List<AttributeTypeValueResponseDTO> buscartodosvivos();
+    List<AttributeTypeValueResponseDTO> buscartodosmuertos();
 
-    AttributeTypeValueDTO aniadirA(AttributeTypeValueDTO attribute);
+    AttributeTypeValueResponseDTO aniadirA(AttributeTypeValueRequestDTO attribute);
 
-    AttributeTypeValueDTO buscarporid(Long id);
+    AttributeTypeValueResponseDTO buscarporid(Long id);
 
     void eliminarAttribute(Long id);
 
-    AttributeTypeValueDTO actualizar (Long id, AttributeTypeValueDTO attribute);
+    AttributeTypeValueResponseDTO actualizar (Long id, AttributeTypeValueRequestDTO attribute);
 
 
 

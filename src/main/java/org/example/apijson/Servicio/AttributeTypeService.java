@@ -3,17 +3,18 @@ package org.example.apijson.Servicio;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.apijson.DTO.AttributeDTO;
-import org.example.apijson.DTO.AttributeTypeDTO;
-import org.example.apijson.Entity.AttributeEntity;
+import org.example.apijson.DTO.AttributeTypeReponseDTO;
+import org.example.apijson.DTO.AttributeTypeRequestDTO;
 import org.example.apijson.Entity.AttributeTypeEntity;
-import org.example.apijson.Entity.AttributeTypeValueEntity;
-import org.example.apijson.Mapping.AttributeMapping;
 import org.example.apijson.Mapping.AttributeTypeMapping;
 import org.example.apijson.Repository.AttributeTypeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @AllArgsConstructor
@@ -25,7 +26,8 @@ public class AttributeTypeService implements IAtributteTypeService {
 
 
     @Override
-    public AttributeTypeDTO listarid(Long id) {
+    @Transactional(readOnly = true)
+    public AttributeTypeReponseDTO listarid(Long id) {
 
         return attributeTypeRepository.findIdByDeletedFalse(id)
                 .stream()
@@ -35,7 +37,8 @@ public class AttributeTypeService implements IAtributteTypeService {
     }
 
     @Override
-    public List<AttributeTypeDTO> listartodosvivos() {
+    @Transactional(readOnly = true)
+    public List<AttributeTypeReponseDTO> listartodosvivos() {
         return attributeTypeRepository.findAllByDeletedFalse()
                 .stream()
                 .map(attributeTypeMapping::toDTO)
@@ -44,7 +47,8 @@ public class AttributeTypeService implements IAtributteTypeService {
     }
 
     @Override
-    public List<AttributeTypeDTO> buscartodosmuertos() {
+    @Transactional(readOnly = true)
+    public List<AttributeTypeReponseDTO> buscartodosmuertos() {
         return  attributeTypeRepository.findAllByDeletedTrue()
                 .stream()
                 .map(attributeTypeMapping::toDTO)
@@ -52,14 +56,15 @@ public class AttributeTypeService implements IAtributteTypeService {
     }
 
     @Override
-    public AttributeTypeDTO aniadir(AttributeTypeDTO dto) {
+    @Transactional(readOnly = true)
+    public AttributeTypeReponseDTO aniadir(AttributeTypeRequestDTO dto) throws InvocationTargetException, IllegalAccessException {
         if(attributeTypeRepository.existsById(dto.getId())){
         log.error("ya existe este id");
         throw new RuntimeException("ya existe este id");
         }
 
         AttributeTypeEntity attributeTypeEntity = AttributeTypeMapping.toEntity(dto);
-        AttributeTypeDTO guardado = attributeTypeMapping.toDTO(attributeTypeRepository.save(attributeTypeEntity));
+        AttributeTypeReponseDTO guardado = attributeTypeMapping.toDTO(attributeTypeRepository.save(attributeTypeEntity));
         log.info("guardado: {}", guardado);
 
         return guardado;
@@ -68,6 +73,7 @@ public class AttributeTypeService implements IAtributteTypeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void eliminar(Long id) {
 
         AttributeTypeEntity attributeTypeEntity = attributeTypeRepository.findById(id)
@@ -77,29 +83,28 @@ public class AttributeTypeService implements IAtributteTypeService {
         attributeTypeRepository.save(attributeTypeEntity);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public AttributeTypeDTO actualizar(Long id, AttributeTypeDTO dto) {
+    public AttributeTypeReponseDTO actualizar(Long id, AttributeTypeRequestDTO dto){
 
         if (dto.getId() != null && !id.equals(dto.getId())) {
             log.error("Error: ID URL ({}) no coincide con ID JSON ({})", id, dto.getId());
             throw new RuntimeException("El ID del cuerpo no coincide con el ID de la URL");
         }
 
-        if(attributeTypeRepository.existsById(id)) {
+        AttributeTypeEntity attributeTypeEntity = attributeTypeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se encontró el tipo de atributo con ID: " + id));
 
-            AttributeTypeEntity attributeTypeEntity = attributeTypeRepository.findById(id)
-                    .orElseThrow();
+        // 3. Actualizamos los datos
+        attributeTypeEntity.setType(dto.getType());
+        attributeTypeEntity.setIsList(dto.getIsList());
+        attributeTypeEntity.setIsEnum(dto.getIsEnum());
 
-            attributeTypeEntity.setType(dto.getType());
-            attributeTypeEntity.setIsList(dto.getIsList());
-            attributeTypeEntity.setIsEnum(dto.getIsEnum());
+        // 4. Guardamos en base de datos
+        attributeTypeRepository.save(attributeTypeEntity);
 
-            attributeTypeRepository.save(attributeTypeEntity);
-
-            return attributeTypeMapping.toDTO(attributeTypeEntity);
-        }
-
-        return dto;
+        // 5. Convertimos a ResponseDTO y lo devolvemos
+        return attributeTypeMapping.toDTO(attributeTypeEntity);
     }
 
 

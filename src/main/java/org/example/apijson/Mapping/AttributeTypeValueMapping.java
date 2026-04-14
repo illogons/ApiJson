@@ -1,28 +1,41 @@
 package org.example.apijson.Mapping;
 
 import lombok.RequiredArgsConstructor;
-import org.example.apijson.DTO.AttributeTypeValueDTO;
+import org.example.apijson.DTO.AttributeTypeValueRequestDTO;
+import org.example.apijson.DTO.AttributeTypeValueResponseDTO;
 import org.example.apijson.Entity.AttributeTypeEntity;
 import org.example.apijson.Entity.AttributeTypeValueEntity;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class AttributeTypeValueMapping {
 
+    public  AttributeTypeValueEntity toEntity(AttributeTypeValueRequestDTO dto) {
+        if (dto == null) return null;
 
-    public AttributeTypeValueDTO toDTO(AttributeTypeValueEntity entity) {
+        AttributeTypeValueEntity entity = new AttributeTypeValueEntity();
+
+        BeanUtils.copyProperties(dto, entity);
+
+        if(dto.getAttributeTypeId() != null) {
+            AttributeTypeEntity type = new AttributeTypeEntity();
+            type.setId(dto.getAttributeTypeId());
+            entity.setAttributeType(type);
+        }
+
+        return entity;
+    }
+
+    public AttributeTypeValueResponseDTO toDTO(AttributeTypeValueEntity entity) {
         if (entity == null) {
             return null;
         }
 
-        AttributeTypeValueDTO dto = new AttributeTypeValueDTO();
+        AttributeTypeValueResponseDTO dto = new AttributeTypeValueResponseDTO();
 
-        dto.setId(entity.getId());
-        dto.setDeleted(entity.getDeleted());
-        dto.setCreatedAt(entity.getCreatedAt());
-        dto.setModifiedAt(entity.getModifiedAt());
-        dto.setValue(entity.getValue());
+        BeanUtils.copyProperties(entity, dto);
 
         if(entity.getAttributeType() != null) {
             dto.setAttributeTypeId(entity.getAttributeType().getId());
@@ -31,18 +44,5 @@ public class AttributeTypeValueMapping {
         return dto;
     }
 
-    public  AttributeTypeValueEntity toEntity(AttributeTypeValueDTO dto, AttributeTypeEntity atributetype) {
-        if (dto == null) return null;
 
-        AttributeTypeValueEntity entity = new AttributeTypeValueEntity();
-
-        entity.setId(dto.getId());
-        entity.setAttributeType(atributetype);
-        entity.setValue(dto.getValue());
-        entity.setCreatedAt(dto.getCreatedAt());
-        entity.setModifiedAt(dto.getModifiedAt());
-
-
-        return entity;
-    }
 }

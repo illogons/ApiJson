@@ -2,7 +2,8 @@ package org.example.apijson.Controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.apijson.DTO.ConfigDTO;
+import org.example.apijson.DTO.ConfigRequestDto;
+import org.example.apijson.DTO.ConfigResponseDTO;
 import org.example.apijson.Entity.ConfigEntity;
 import org.example.apijson.Servicio.ConfigService;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +20,18 @@ public class ConfigController{
     private final ConfigService configService;
 
     @GetMapping("/listar")
-    public ResponseEntity<List<ConfigDTO>> listar(){
+    public ResponseEntity<List<ConfigResponseDTO>> listar(){
         return  ResponseEntity.ok(configService.listar());
     }
 
     @PostMapping("/generarJson")
-    public ResponseEntity<ConfigDTO> aniadir(@RequestBody ConfigDTO configDTO){
+    public ResponseEntity<ConfigResponseDTO> aniadir(@RequestBody ConfigRequestDto configDTO){
         return  ResponseEntity.ok(configService.aniadir(configDTO));
 
     }
 
     @PutMapping("/actualizar/{id}")
-    public ResponseEntity<ConfigDTO> actualizar(@RequestBody Long id, @PathVariable ConfigDTO configDTO){
+    public ResponseEntity<ConfigResponseDTO> actualizar(@RequestBody Long id, @PathVariable ConfigRequestDto configDTO){
         return ResponseEntity.ok(configService.actualizar(id, configDTO));
     }
 
