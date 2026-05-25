@@ -1,4 +1,4 @@
-package org.example.apijson.Entity;
+package org.example.apijson.Model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,13 +7,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Getter @Setter
 @Table(name = "attribute")
 @EntityListeners(AuditingEntityListener.class)  // ← añade esto
-public class AttributeEntity {
+public class AttributeModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +36,7 @@ public class AttributeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ATTRIBUTE_TYPE")
-    private AttributeTypeEntity AtributeType;
+    private AttributeTypeModel AtributeType;
 
 
 }

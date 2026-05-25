@@ -1,11 +1,10 @@
 package org.example.apijson.Controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.apijson.DTO.AttributeTypeReponseDTO;
 import org.example.apijson.DTO.AttributeTypeRequestDTO;
-import org.example.apijson.DTO.AttributeTypeValueResponseDTO;
-import org.example.apijson.Entity.AttributeTypeEntity;
 import org.example.apijson.Servicio.AttributeTypeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +21,7 @@ public class AttributeTypeController {
     private final AttributeTypeService attributeTypeService;
 
     @GetMapping("/listar/{id}")
+    @Operation(summary = "hola")
     public ResponseEntity<AttributeTypeReponseDTO> listar(@PathVariable Long id){
         return ResponseEntity.ok(attributeTypeService.listarid(id));
     }

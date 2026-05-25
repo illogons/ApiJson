@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.apijson.DTO.ConfigRequestDto;
 import org.example.apijson.DTO.ConfigResponseDTO;
-import org.example.apijson.Entity.AttributeEntity;
-import org.example.apijson.Entity.ConfigEntity;
+import org.example.apijson.Model.ConfigModel;
 import org.example.apijson.Mapping.AttributeMapping;
 import org.example.apijson.Mapping.ConfigMapping;
 import org.example.apijson.Repository.AttributeRepository;
@@ -37,7 +36,7 @@ public class ConfigService implements IConfigService {
     public ConfigResponseDTO aniadir(ConfigRequestDto configDTO) {
 
 
-        ConfigEntity configEntity = configMapping.toEntity(configDTO);
+        ConfigModel configEntity = configMapping.toEntity(configDTO);
         ConfigResponseDTO dto = configMapping.toDTO(configRepository.save(configEntity));
 
         return dto;
@@ -46,7 +45,7 @@ public class ConfigService implements IConfigService {
     @Override
     public void eliminar(Long id){
 
-        ConfigEntity configid= configRepository.findById(id).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
+        ConfigModel configid= configRepository.findById(id).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
 
         configid.setDeleted(true);
         configRepository.save(configid);
@@ -62,11 +61,11 @@ public class ConfigService implements IConfigService {
                 throw new RuntimeException("El ID del cuerpo no coincide con el ID de la URL");
             }
 
-            ConfigEntity configentity = configRepository.findById(id).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
+            ConfigModel configentity = configRepository.findById(id).orElseThrow(() -> new RuntimeException("Tipo de atributo no encontrado"));
 
             configentity.setDefaultValue(configDTO.getDefaultValue());
 
-            ConfigEntity configEntity = configMapping.toEntity(configDTO);
+            ConfigModel configEntity = configMapping.toEntity(configDTO);
             ConfigResponseDTO dto = configMapping.toDTO(configRepository.save(configEntity));
 
 

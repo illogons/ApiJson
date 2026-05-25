@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.apijson.Entity.AttributeEntity;
-import org.example.apijson.Entity.AttributeTypeEntity;
-import org.example.apijson.Entity.AttributeTypeValueEntity;
-import org.example.apijson.Entity.ConfigEntity;
+import org.example.apijson.Model.AttributeModel;
+import org.example.apijson.Model.AttributeTypeModel;
+import org.example.apijson.Model.AttributeTypeValueModel;
+import org.example.apijson.Model.ConfigModel;
 import org.example.apijson.Repository.AttributeRepository;
 import org.example.apijson.Repository.AttributeTypeRepository;
 import org.example.apijson.Repository.AttributeTypeValueRepository;
@@ -45,13 +45,13 @@ public class DeserializarService {
         });
     }
 
-    private void procesarNodo(String nombreAtributo, JsonNode nodoActual, ConfigEntity padre) {
+    private void procesarNodo(String nombreAtributo, JsonNode nodoActual, ConfigModel padre) {
         try {
             // buscamos si el atributo existe o le tenemos q crear
-            AttributeEntity atributo = gestionarAtributo(nombreAtributo, nodoActual);
+            AttributeModel atributo = gestionarAtributo(nombreAtributo, nodoActual);
 
-            ConfigEntity config;
-            Optional<ConfigEntity> configExistente;
+            ConfigModel config;
+            Optional<ConfigModel> configExistente;
 
 
             if (padre == null) {
@@ -67,7 +67,7 @@ public class DeserializarService {
                 config.setModifiedAt(LocalDateTime.now());
             } else {
 
-                config = new ConfigEntity();
+                config = new ConfigModel();
                 config.setAttribute(atributo);
                 config.setParentConfig(padre); // Le asigno su padre
                 config.setCreatedAt(LocalDateTime.now());
@@ -79,7 +79,7 @@ public class DeserializarService {
             if (nodoActual.isObject()) {
 
                 config = configRepository.save(config); // lo guardo para q genere su propio id
-                ConfigEntity padreActual = config; // Esta carpeta ahora se convierte en el "padre" de lo que lleve dentro
+                ConfigModel padreActual = config; // Esta carpeta ahora se convierte en el "padre" de lo que lleve dentro
 
                 // Recorremos tod0 lo que hay dentro de esta carpeta y volvemos a llamar a este mismo métod0
                 nodoActual.fields().forEachRemaining(entry ->
@@ -101,7 +101,7 @@ public class DeserializarService {
                 } else {
                     // Es una lista compleja (una lista que contiene objetos dentro).
                     config = configRepository.save(config); // Guardamos el padre
-                    ConfigEntity padreActual = config;
+                    ConfigModel padreActual = config;
                     // Recorremos la lista y procesamos cada elemento añadiéndole "_ITEM" al nombre
                     nodoActual.forEach(itemJson ->
                             procesarNodo(nombreAtributo + "_ITEM", itemJson, padreActual)
@@ -129,9 +129,9 @@ public class DeserializarService {
     }
 
 
-    private AttributeEntity gestionarAtributo(String nombre, JsonNode nodo) {
+    private AttributeModel gestionarAtributo(String nombre, JsonNode nodo) {
         //  Buscamos si ya existe el atributo en BD
-        Optional<AttributeEntity> atributoExistente = attributeRepository.findByName(nombre);
+        Optional<AttributeModel> atributoExistente = attributeRepository.findByName(nombre);
         if (atributoExistente.isPresent()) {
             return atributoExistente.get();
         }
@@ -159,15 +159,15 @@ public class DeserializarService {
         }
 
         //  buscamos si ya existe
-        AttributeTypeEntity tipoAsignar;
-        Optional<AttributeTypeEntity> tipoExistente = typeRepository.findByTypeAndIsListAndIsEnum(expectedType, expectedIsList, expectedIsEnum);
+        AttributeTypeModel tipoAsignar;
+        Optional<AttributeTypeModel> tipoExistente = typeRepository.findByTypeAndIsListAndIsEnum(expectedType, expectedIsList, expectedIsEnum);
 
         if (tipoExistente.isPresent()) {
             // El tipo ya existe, lo reciclamos.
             tipoAsignar = tipoExistente.get();
         } else {
             // si tipo no existe, lo creamos nuevo.
-            AttributeTypeEntity nuevoTipo = new AttributeTypeEntity();
+            AttributeTypeModel nuevoTipo = new AttributeTypeModel();
             nuevoTipo.setCreatedAt(LocalDateTime.now());
             nuevoTipo.setModifiedAt(LocalDateTime.now());
             nuevoTipo.setDeleted(false);
@@ -181,7 +181,7 @@ public class DeserializarService {
         }
 
         // Ahora sí, creamos el Atributo nuevo uniéndolo a su tipo nuevo o no
-        AttributeEntity nuevoAtributo = new AttributeEntity();
+        AttributeModel nuevoAtributo = new AttributeModel();
         nuevoAtributo.setName(nombre);
         nuevoAtributo.setAtributeType(tipoAsignar); // Usamos el tipo correcto
         nuevoAtributo.setCreatedAt(LocalDateTime.now());
@@ -194,7 +194,7 @@ public class DeserializarService {
 
     private void validarvalues(String nombreAtributo, String valorJson) {
 
-        Optional<AttributeTypeEntity> tipoOpt = typeRepository.findByType(nombreAtributo.toUpperCase());// busco el tipo del atributo en este cao de
+        Optional<AttributeTypeModel> tipoOpt = typeRepository.findByType(nombreAtributo.toUpperCase());// busco el tipo del atributo en este cao de
         // indicators y encuentra el INDICATORS
 
         if (tipoOpt.isPresent() && Boolean.TRUE.equals(tipoOpt.get().getIsEnum())) {// si no sale null y es enum entra
@@ -224,7 +224,7 @@ public class DeserializarService {
     private List<String> obtenerValoresPermitidosPorTipo(Long typeId) {// va a buscar con el id del tipo todos los que sean de ese tipo
         return attributeTypeValueRepository.findByAttributeType_IdAndDeletedFalse(typeId)
                 .stream()
-                .map(AttributeTypeValueEntity::getValue)// esto va a coger solo el value/ el nombre
+                .map(AttributeTypeValueModel::getValue)// esto va a coger solo el value/ el nombre
                 .toList();
     }
 }

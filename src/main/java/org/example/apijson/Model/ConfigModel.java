@@ -1,18 +1,16 @@
-package org.example.apijson.Entity;
+package org.example.apijson.Model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.repository.cdi.Eager;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Getter @Setter
 @Table(name= "config")
 
-public class ConfigEntity {
+public class ConfigModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,11 +42,11 @@ public class ConfigEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ATTRIBUTE_ID")
-    private AttributeEntity attribute;
+    private AttributeModel attribute;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT")
-    private ConfigEntity parentConfig;
+    private ConfigModel parentConfig;
 
 
 

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.apijson.Entity.ConfigEntity;
+import org.example.apijson.Model.ConfigModel;
 import org.example.apijson.Repository.ConfigRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +33,12 @@ public class SerializarService {
             ObjectNode rootNode = objectMapper.createObjectNode();
 
             // nos devuelve una lista plana con todos los regisntros de config
-            List<ConfigEntity> configs = configRepository.findAll();// el JsonNode es el que nos permite añadir tanto un objeto como un array
+            List<ConfigModel> configs = configRepository.findAll();// el JsonNode es el que nos permite añadir tanto un objeto como un array
             //el long es el id de la base de datos, y el valor son las cajas vacias
             Map<Long, JsonNode> contenedores = new HashMap<>();
 
             //Crear cajas, en este bucle solo importan los registros q son de tipo node, osea q contienen otros dentro
-            for (ConfigEntity config : configs) {
+            for (ConfigModel config : configs) {
                 String tipo = config.getAttribute().getAtributeType().getType(); // cogemos el tipo de atributtetype
                 Boolean esLista = config.getAttribute().getAtributeType().getIsList(); // vemos si es una lista o no
 
@@ -54,7 +54,7 @@ public class SerializarService {
 
 
             // SEGUNDO BUCLE: Rellenar cajas este bucle va a buscar con el padre en donde tiene q guardarse cada informacion
-            for (ConfigEntity config : configs) {
+            for (ConfigModel config : configs) {
                 // 1. Obtener metadatos básicos
                 String nombre = config.getAttribute().getName();
                 String tipo = config.getAttribute().getAtributeType().getType();

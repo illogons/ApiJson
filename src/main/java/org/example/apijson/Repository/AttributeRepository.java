@@ -1,6 +1,6 @@
 package org.example.apijson.Repository;
 
-import org.example.apijson.Entity.AttributeEntity;
+import org.example.apijson.Model.AttributeModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AttributeRepository extends JpaRepository<AttributeEntity, Long> {
+public interface AttributeRepository extends JpaRepository<AttributeModel, Long> {
 
-    Optional<AttributeEntity> findById(Long id);
+    Optional<AttributeModel> findById(Long id);
 
-    List<AttributeEntity> findAllByDeletedFalse(Long id);
+    List<AttributeModel> findAllByDeletedFalse(Long id);
 
-    List<AttributeEntity> findAllByDeletedFalse();
+    List<AttributeModel> findAllByDeletedFalse();
 
-    List<AttributeEntity> findAllByDeletedTrue();
+    List<AttributeModel> findAllByDeletedTrue();
 
 
-    Optional<AttributeEntity> findByName(String nombre);
+    Optional<AttributeModel> findByName(String nombre);
 }

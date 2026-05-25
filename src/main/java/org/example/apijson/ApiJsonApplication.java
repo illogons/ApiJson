@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@EnableJpaAuditing  // ← añade esto
+@EnableJpaAuditing
 public class ApiJsonApplication {
 
     public static void main(String[] args) {

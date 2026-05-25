@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.example.apijson.DTO.AttributeRequestDTO;
 import org.example.apijson.DTO.AttributeResponseDTO;
-import org.example.apijson.Entity.AttributeEntity;
+import org.example.apijson.Model.AttributeModel;
 import org.example.apijson.Mapping.AttributeMapping;
 import org.example.apijson.Repository.AttributeRepository;
 import org.example.apijson.Repository.AttributeTypeRepository;
@@ -38,12 +38,12 @@ public class AttributeService implements IAttributeService {
                 .toList();
     }
 
-    @SneakyThrows // <--- AÑADE ESTO AQUÍ
+    @SneakyThrows
     @Override
     public AttributeResponseDTO aniadirA(AttributeRequestDTO attribute) throws InvocationTargetException, IllegalAccessException {
 
         // Corregido: attributeMapping en minúscula
-        AttributeEntity attributeEntity = attributeMapping.toEntity(attribute);
+        AttributeModel attributeEntity = attributeMapping.toEntity(attribute);
 
         AttributeResponseDTO guardada = attributeMapping.toDTO(attributeRepository.save(attributeEntity));
 
@@ -64,7 +64,7 @@ public class AttributeService implements IAttributeService {
 
     @Override
     public void eliminarAttribute(Long id) {
-        AttributeEntity attributeEntity = attributeRepository.findById(id)
+        AttributeModel attributeEntity = attributeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Atributo no encontrado"));
 
         attributeEntity.setDeleted(true);
@@ -76,7 +76,7 @@ public class AttributeService implements IAttributeService {
     public AttributeResponseDTO actualizarA(Long id, AttributeRequestDTO dto) { // Añadido el ID como parámetro
 
         // 1. Buscamos la entidad que ya existe
-        AttributeEntity entityExistente = attributeRepository.findById(id)
+        AttributeModel entityExistente = attributeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Atributo no encontrado con ID: " + id));
 
         // 2. Actualizamos los campos necesarios manualmente

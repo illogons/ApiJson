@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.apijson.DTO.AttributeTypeValueRequestDTO;
 import org.example.apijson.DTO.AttributeTypeValueResponseDTO;
-import org.example.apijson.Entity.AttributeTypeEntity;
-import org.example.apijson.Entity.AttributeTypeValueEntity;
+import org.example.apijson.Model.AttributeTypeValueModel;
 import org.example.apijson.Mapping.AttributeTypeValueMapping;
 import org.example.apijson.Repository.AttributeTypeValueRepository;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,7 @@ public class AttributeTypeValueService implements IAttributeTypeValueService {
     @Override
     public void eliminarAttribute(Long id) {
 
-        AttributeTypeValueEntity attributeEntity = attributeTypeValue.findById(id).orElseThrow();
+        AttributeTypeValueModel attributeEntity = attributeTypeValue.findById(id).orElseThrow();
 
         attributeEntity.setDeleted(true);
         attributeTypeValue.save(attributeEntity);
@@ -65,7 +64,7 @@ public class AttributeTypeValueService implements IAttributeTypeValueService {
     public AttributeTypeValueResponseDTO aniadirA(AttributeTypeValueRequestDTO attribute) {
 
 
-        AttributeTypeValueEntity attributeEntity = attributeTypeValuemapping.toEntity(attribute);
+        AttributeTypeValueModel attributeEntity = attributeTypeValuemapping.toEntity(attribute);
         AttributeTypeValueResponseDTO guardada = attributeTypeValuemapping.toDTO(attributeTypeValue.save(attributeEntity));
 
         log.info("Atributo creado con exito ID: {}", attributeEntity.getId());
@@ -84,7 +83,7 @@ public class AttributeTypeValueService implements IAttributeTypeValueService {
                 throw new RuntimeException("El ID del cuerpo no coincide con el ID de la URL");
             }
 
-            AttributeTypeValueEntity attributeEntity = attributeTypeValuemapping.toEntity(attribute);
+            AttributeTypeValueModel attributeEntity = attributeTypeValuemapping.toEntity(attribute);
             AttributeTypeValueResponseDTO guardada = attributeTypeValuemapping.toDTO(attributeTypeValue.save(attributeEntity));
 
             return guardada;

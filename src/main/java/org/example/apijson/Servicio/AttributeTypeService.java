@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.apijson.DTO.AttributeTypeReponseDTO;
 import org.example.apijson.DTO.AttributeTypeRequestDTO;
-import org.example.apijson.Entity.AttributeTypeEntity;
+import org.example.apijson.Model.AttributeTypeModel;
 import org.example.apijson.Mapping.AttributeTypeMapping;
 import org.example.apijson.Repository.AttributeTypeRepository;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @Service
 @AllArgsConstructor
@@ -63,7 +61,7 @@ public class AttributeTypeService implements IAtributteTypeService {
         throw new RuntimeException("ya existe este id");
         }
 
-        AttributeTypeEntity attributeTypeEntity = AttributeTypeMapping.toEntity(dto);
+        AttributeTypeModel attributeTypeEntity = AttributeTypeMapping.toEntity(dto);
         AttributeTypeReponseDTO guardado = attributeTypeMapping.toDTO(attributeTypeRepository.save(attributeTypeEntity));
         log.info("guardado: {}", guardado);
 
@@ -76,7 +74,7 @@ public class AttributeTypeService implements IAtributteTypeService {
     @Transactional(readOnly = true)
     public void eliminar(Long id) {
 
-        AttributeTypeEntity attributeTypeEntity = attributeTypeRepository.findById(id)
+        AttributeTypeModel attributeTypeEntity = attributeTypeRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
 
         attributeTypeEntity.setDeleted(true);
@@ -92,7 +90,7 @@ public class AttributeTypeService implements IAtributteTypeService {
             throw new RuntimeException("El ID del cuerpo no coincide con el ID de la URL");
         }
 
-        AttributeTypeEntity attributeTypeEntity = attributeTypeRepository.findById(id)
+        AttributeTypeModel attributeTypeEntity = attributeTypeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se encontró el tipo de atributo con ID: " + id));
 
         // 3. Actualizamos los datos

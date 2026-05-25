@@ -1,17 +1,16 @@
-package org.example.apijson.Entity;
+package org.example.apijson.Model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "attribute_type_value")
-public class AttributeTypeValueEntity  {
+@Table(name = "attribute_type")
+public class AttributeTypeModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,17 +28,17 @@ public class AttributeTypeValueEntity  {
     @Column(name= "VERSION_LOCK")
     private Long versionLock;
 
-    @Column(name = "DESCRIPTION")
-    private String description;
+    @Column(name= "ENUM_DESCRIPTION")
+    private String enumDescription;
 
-    @Column(name = "VALUE")
-    private String value;
+    @Column(name = "IS_ENUM")
+    private Boolean isEnum;
 
-    @ManyToOne
-    @JoinColumn(name = "ATTRIBUTE_TYPE")
-    private AttributeTypeEntity attributeType;
+    @Column(name= "IS_LIST")
+    private Boolean isList;
 
-
+    @Column(name = "TYPE")
+    private String type;
 
 
 }

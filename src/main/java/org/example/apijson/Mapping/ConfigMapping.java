@@ -2,10 +2,10 @@ package org.example.apijson.Mapping;
 
 import lombok.RequiredArgsConstructor;
 import org.example.apijson.DTO.ConfigResponseDTO;
-import org.example.apijson.Entity.AttributeEntity;
+import org.example.apijson.Model.AttributeModel;
 import org.springframework.beans.BeanUtils;
 import org.example.apijson.DTO.ConfigRequestDto;
-import org.example.apijson.Entity.ConfigEntity;
+import org.example.apijson.Model.ConfigModel;
 import org.springframework.stereotype.Component;
 
 
@@ -14,20 +14,20 @@ import org.springframework.stereotype.Component;
 
 public class ConfigMapping {
 
-    public ConfigEntity toEntity(ConfigRequestDto dto) {
+    public ConfigModel toEntity(ConfigRequestDto dto) {
         if (dto == null) return null;
-        ConfigEntity entity = new ConfigEntity();
+        ConfigModel entity = new ConfigModel();
 
         BeanUtils.copyProperties(dto, entity);
 
         if(dto.getParent() != null){
-            ConfigEntity parent= new ConfigEntity();
+            ConfigModel parent= new ConfigModel();
             parent.setId(dto.getParent());
             entity.setParentConfig(parent);
         }
 
         if(dto.getAttributeId() != null){
-            AttributeEntity attribute = new AttributeEntity();
+            AttributeModel attribute = new AttributeModel();
             attribute.setId(dto.getAttributeId());
             entity.setAttribute(attribute);
         }
@@ -36,7 +36,7 @@ public class ConfigMapping {
     }
 
 
-    public ConfigResponseDTO toDTO(ConfigEntity entity) {
+    public ConfigResponseDTO toDTO(ConfigModel entity) {
         if (entity == null){
             return null;
         }
